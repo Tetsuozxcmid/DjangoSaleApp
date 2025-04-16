@@ -24,6 +24,7 @@
             <small>Автор: {{ post.author.username }} | {{ post.created_at }}</small>
             
             {% if user == post.author %}
+            <a href="{% url 'edit_post' post.id %}" class="btn-edit">Редактировать</a>
             <form action="{% url 'delete_post' post.id %}" method="POST">
                 {% csrf_token %}
                 <button type="submit">Delete</button>

@@ -1,0 +1,20 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="edit-form-container">
+        <h2>Редактирование объявления</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn-save">Сохранить изменения</button>
+            <a href="{% url 'auth_welcome' %}" class="btn-cancel">Отмена</a>
+        </form>
+    </div>
+</body>
+</html>

@@ -62,6 +62,23 @@ def create_post(request):
         form = PostForm()
     return render(request,'create_post.html',{'form': form})
 
+@login_required
+def edit_post(request,post_id):
+    post = get_object_or_404(Post,id=post_id)
+    if request.user == post.author:
+        if request.method == 'POST':
+            form = PostForm(request.POST,instance=post)
+            if form.is_valid():
+                form.save()
+                messages.success(request,"Обьявление успешно изменено")
+                return redirect('auth_welcome')
+        else:
+            form = PostForm(instance=post)
+    else:
+        messages.error(request,"Вы можете редактировать только свои обьявления")
+    return render(request,'edit_post.html',{'form':form,'post':post})
+
+@login_required
 def logout_view(request):
     logout(request)
     return redirect('auth_login')
