@@ -3,7 +3,8 @@ from django.contrib.auth import login,logout,authenticate
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .forms import RegisterForm
+from .forms import RegisterForm,PostForm
+from .models import Post
 
 # Create your views here.
 def register(request):
@@ -44,7 +45,22 @@ def user_login(request):
 
 @login_required
 def welcome(request):
-    return render(request,'index.html')
+    posts = Post.objects.all().order_by('-created_at')
+    return render(request,'index.html',{'posts':posts})
+
+
+@login_required
+def create_post(request):
+    if request.method == 'POST':
+        form = PostForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.author = request.user
+            post.save()
+            return redirect('auth_welcome')
+    else:
+        form = PostForm()
+    return render(request,'create_post.html',{'form': form})
 
 def logout_view(request):
     logout(request)

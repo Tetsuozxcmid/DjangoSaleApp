@@ -9,12 +9,25 @@
         <h1>Welcome, {{ user.username }}!</h1>
         <p>You have successfully logged in.</p>
         <a href="{% url 'auth_logout' %}" style="color: #007bff; text-decoration: none;">Logout</a>
+
+        <p>create post</p>
+        <a href="{% url 'create_post' %}">create</a>
     </div>
 
-    <div class="posts">
-        <h1>Post</h1>
-        <h2>Post desc</h2>
-        <h3>Post price</h3>
+    <div class="posts-container">
+        {% for post in posts %}
+        <div class="post">
+            <h3>{{ post.title }}</h3>
+            <p><strong>Категория:</strong> {{ post.get_category_display }}</p>
+            <p><strong>Состояние:</strong> {{ post.get_condition_display }}</p>
+            <p>{{ post.description }}</p>
+            <small>Автор: {{ post.author.username }} | {{ post.created_at }}</small>
+            
+            {% if user == post.author %}
+            <h1>delete</h1>
+            {% endif %}
+        </div>
+        {% endfor %}
     </div>
 </body>
 </html>
