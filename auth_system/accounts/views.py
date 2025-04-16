@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib.auth import login,logout,authenticate
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
@@ -66,4 +66,12 @@ def logout_view(request):
     logout(request)
     return redirect('auth_login')
                 
+
+@login_required
+def delete_post(request,post_id):
+    post = get_object_or_404(Post,id=post_id)
+    if request.user == post.author:
+        post.delete()
+    return redirect('auth_welcome')
+
             
