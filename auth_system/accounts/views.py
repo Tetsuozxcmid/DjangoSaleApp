@@ -4,7 +4,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .forms import RegisterForm,PostForm,ExchangeOfferForm
-from .models import Post
+from .models import Post,Offer
 
 # Create your views here.
 def register(request):
@@ -98,7 +98,8 @@ def create_exchange_offer(request, post_id):
         form = ExchangeOfferForm(request.POST, user=request.user)
         if form.is_valid():
             offer = form.save(commit=False)
-            offer.ad_sender = sender_post
+            offer.sender_user = request.user
+            offer.ad_receiver = sender_post
             offer.save()
             messages.success(request, 'Предложение обмена отправлено!')
             return redirect('post_detail', post_id=post_id)
@@ -113,7 +114,11 @@ def create_exchange_offer(request, post_id):
 @login_required
 def post_detail(request, post_id):
     post = get_object_or_404(Post, id=post_id)
-    return render(request, 'accounts/post_detail.html', {'post': post})
+    offers = Offer.objects.filter(ad_receiver=post)  # Получаем все предложения для этого поста
+    return render(request, 'accounts/post_detail.html', {
+        'post': post,
+        'offers': offers  # Передаем список предложений
+    })
 
 
 

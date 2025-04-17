@@ -3,15 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Детали объявления</title>
 </head>
 <body>
     <div class="post-detail">
-        <h1>Предложение обмена отправлено</h1>
-        <h2>Название - {{ post.title }}</h2>
-        <p> Категориая - {{ post.get_category_display }}</p>
-        <p>Состояние - {{ post.get_condition_display }} </p>
+        <h1>{{ post.title }}</h1>
+        <p>Категория - {{ post.get_category_display }}</p>
+        <p>Состояние - {{ post.get_condition_display }}</p>
         <p>Описание - {{ post.description }}</p>
+
+        <h2>Предложения обмена:</h2>
+        {% for offer in offers %}
+            <div class="offer">
+                <p>Отправитель: {{ offer.sender_user.username }}</p>
+                <p>Комментарий: {{ offer.comment }}</p>
+                <p>Статус: {{ offer.get_status_display }}</p>
+            </div>
+        {% empty %}
+            <p>Пока нет предложений обмена</p>
+        {% endfor %}
     </div>
 </body>
 </html>

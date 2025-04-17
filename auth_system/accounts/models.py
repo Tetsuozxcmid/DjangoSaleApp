@@ -36,7 +36,7 @@ class Offer(models.Model):
         ('rejected' ,'Отказано'),
     ]
 
-    ad_sender = models.ForeignKey(Post, on_delete=models.CASCADE,related_name='sent_offers')
+    sender_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_offers')
     ad_receiver = models.ForeignKey(Post,on_delete=models.CASCADE, related_name='received_offers')
     comment = models.TextField(verbose_name='Комментарий')
     status = models.CharField(max_length=10, choices=STATUS, default='pending')
