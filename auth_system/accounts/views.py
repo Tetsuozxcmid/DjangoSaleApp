@@ -110,5 +110,11 @@ def create_exchange_offer(request, post_id):
         'sender_post': sender_post
     })
     
+@login_required
+def post_detail(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    return render(request, 'accounts/post_detail.html', {'post': post})
+    
+
 
             

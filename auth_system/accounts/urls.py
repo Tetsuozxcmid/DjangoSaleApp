@@ -12,4 +12,5 @@ urlpatterns = [
     path('posts/delete/<int:post_id>',views.delete_post,name='delete_post'),
     path('posts/edit/<int:post_id>',views.edit_post,name='edit_post'),
     path('post/<int:post_id>/exchange/',views.create_exchange_offer,name='create_exchange'),
+    path('post/<int:post_id>/', views.post_detail, name='post_detail')
 ]
