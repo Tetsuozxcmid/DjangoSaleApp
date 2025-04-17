@@ -1,10 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Welcome</title>
-</head>
-<body>
+{% extends 'accounts/base.html' %}
+{% load static %}
+
+{% block title %}Главная страница{% endblock %}
+
+{% block content %}
     <div class="welcome-container">
         <h1>Welcome, {{ user.username }}!</h1>
         <p>You have successfully logged in.</p>
@@ -22,6 +21,9 @@
             <p><strong>Состояние:</strong> {{ post.get_condition_display }}</p>
             <p>{{ post.description }}</p>
             <small>Автор: {{ post.author.username }} | {{ post.created_at }}</small>
+            {% if user.is_authenticated and user != post.author %}
+            <a href="{% url 'create_exchange' post.id %}" class="btn btn-primary">Предложить обмен</a>
+            {% endif %}
             
             {% if user == post.author %}
             <a href="{% url 'edit_post' post.id %}" class="btn-edit">Редактировать</a>
@@ -33,5 +35,4 @@
         </div>
         {% endfor %}
     </div>
-</body>
-</html>
+{% endblock %}

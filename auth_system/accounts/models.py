@@ -27,3 +27,17 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+    
+
+class Offer(models.Model):
+    STATUS = [
+        ('await', 'Ожидает'),
+        ('accepted','Принято'),
+        ('rejected' ,'Отказано'),
+    ]
+
+    ad_sender = models.ForeignKey(Post, on_delete=models.CASCADE,related_name='sent_offers')
+    ad_receiver = models.ForeignKey(Post,on_delete=models.CASCADE, related_name='received_offers')
+    comment = models.TextField(verbose_name='Комментарий')
+    status = models.CharField(max_length=10, choices=STATUS, default='pending')
+    created_at = models.DateTimeField(auto_now_add=True)
