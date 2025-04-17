@@ -6,7 +6,7 @@
 </head>
 <body>
     <div class="welcome-container">
-        <h1>Welcome, {{ user.username }}!</h1>
+        <h1>Welcome, {{ user.username }}!</h1> -> current user
         <p>You have successfully logged in.</p>
         <a href="{% url 'auth_logout' %}" style="color: #007bff; text-decoration: none;">Logout</a>
 
