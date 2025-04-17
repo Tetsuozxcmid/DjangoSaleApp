@@ -3,7 +3,7 @@ from django.contrib.auth import login,logout,authenticate
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .forms import RegisterForm,PostForm
+from .forms import RegisterForm,PostForm,ExchangeOfferForm
 from .models import Post
 
 # Create your views here.
@@ -21,8 +21,7 @@ def register(request):
             messages.error(request,'Registration failed')
     else:
         form = RegisterForm()
-    return render(request,'register.html',{'form':form})
-
+    return render(request,'accounts/register.html',{'form':form})
 
 def user_login(request):
     if request.method == 'POST':
@@ -38,16 +37,14 @@ def user_login(request):
                 messages.error(request, 'Invalid username or password.')
         else:
             messages.error(request, 'Invalid username or password.')
-
     else:
         form = AuthenticationForm()
-    return render(request,'login.html',{'form':form})
+    return render(request,'accounts/login.html',{'form':form})
 
 @login_required
 def welcome(request):
     posts = Post.objects.all().order_by('-created_at')
-    return render(request,'index.html',{'posts':posts})
-
+    return render(request,'accounts/index.html',{'posts':posts})
 
 @login_required
 def create_post(request):
@@ -60,7 +57,7 @@ def create_post(request):
             return redirect('auth_welcome')
     else:
         form = PostForm()
-    return render(request,'create_post.html',{'form': form})
+    return render(request,'accounts/create_post.html',{'form': form})
 
 @login_required
 def edit_post(request,post_id):
@@ -76,19 +73,48 @@ def edit_post(request,post_id):
             form = PostForm(instance=post)
     else:
         messages.error(request,"Вы можете редактировать только свои обьявления")
-    return render(request,'edit_post.html',{'form':form,'post':post})
+    return render(request,'accounts/edit_post.html',{'form':form,'post':post})
 
 @login_required
 def logout_view(request):
     logout(request)
     return redirect('auth_login')
                 
-
 @login_required
 def delete_post(request,post_id):
     post = get_object_or_404(Post,id=post_id)
     if request.user == post.author:
         post.delete()
     return redirect('auth_welcome')
+
+
+@login_required
+def create_exchange_offer(request, post_id):
+    sender_post = get_object_or_404(Post, id=post_id)
+    if sender_post.author == request.user:
+        messages.error(request, "Вы не можете предложить обмен своего же объявления!")
+        return redirect('post_detail', post_id=post_id)
+    if request.method == 'POST':
+        form = ExchangeOfferForm(request.POST, user=request.user)
+        if form.is_valid():
+            offer = form.save(commit=False)
+            offer.ad_sender = sender_post
+            offer.save()
+            messages.success(request, 'Предложение обмена отправлено!')
+            return redirect('post_detail', post_id=post_id)
+    else:
+        form = ExchangeOfferForm(user=request.user)
+
+    return render(request, 'accounts/create_offer.html', {
+        'form': form,
+        'sender_post': sender_post
+    })
+
+@login_required
+def post_detail(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    return render(request, 'accounts/post_detail.html', {'post': post})
+
+
 
             
