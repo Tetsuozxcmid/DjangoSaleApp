@@ -39,6 +39,7 @@ class PostCreatesTests(TestCase):
         self.post_delete_url = reverse('delete_post', args=[1])
         self.post_edit_url = reverse('edit_post', args=[1])
         self.post_search_url = reverse('search')
+
         self.user = User.objects.create_user(
             username='testpostuser', password='pass12345')
 
@@ -122,5 +123,44 @@ class PostCreatesTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
 
-    
         self.assertContains(response, 'Автомобиль')
+
+
+class OfferCreateTests(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.sender_user = User.objects.create_user(
+            username='senderuser', password='testpass')
+        self.receiver_user = User.objects.create_user(
+            username='receiveruser', password='testpass')
+
+        self.receiver_post = Post.objects.create(
+            title='Ноутбук',
+            description='Новый ноутбук',
+            category='electronics',
+            condition='new',
+            author=self.receiver_user
+        )
+
+        self.offer_url = reverse('create_exchange', args=[
+                                 self.receiver_post.id])
+
+    def test_create_offer_success(self):
+        self.client.login(username='senderuser', password='testpass')
+
+        response = self.client.post(self.offer_url, {
+            'ad_receiver': self.receiver_post.id,
+            'comment': 'Хочу обменять на что-то другое'
+        })
+
+        if response.status_code == 200:
+            print("Form errors:", response.context['form'].errors)
+
+        self.assertEqual(response.status_code, 302)
+
+        from .models import Offer
+        self.assertTrue(Offer.objects.filter(
+            sender_user=self.sender_user,
+            ad_receiver=self.receiver_post,
+            comment='Хочу обменять на что-то другое'
+        ).exists())

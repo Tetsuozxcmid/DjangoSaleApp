@@ -25,7 +25,7 @@ class ExchangeOfferForm(forms.ModelForm):
         fields = ['ad_receiver', 'comment']
         widgets = {
             'comment': forms.Textarea(attrs={
-                'rows': 4, 
+                'rows': 4,
                 'placeholder': 'Ваше предложение обмена...'
             }),
         }
@@ -38,9 +38,8 @@ class ExchangeOfferForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.user = user
         self.fields['ad_receiver'].queryset = Post.objects.exclude(author=user)
-        
-        
+
         if initial_receiver:
             self.fields['ad_receiver'].initial = initial_receiver
-        
+
         self.fields['ad_receiver'].label_from_instance = lambda obj: f"{obj.title} (Категория: {obj.get_category_display()})"
