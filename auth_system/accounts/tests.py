@@ -36,26 +36,46 @@ class PostCreatesTests(TestCase):
     def setUp(self):
         self.client = Client()
         self.post_create_url = reverse('create_post')
+        self.post_delete_url = reverse('delete_post', args=[1])
         self.user = User.objects.create_user(
             username='testpostuser', password='pass12345')
 
-    def test_create_post(self):
+        self.post = Post.objects.create(
+            title='Тестовое обьявление для удаления',
+            description='Описание для удаления',
+            category='clothing',
+            condition='new',
+            author=self.user
+        )
 
+    def test_create_post(self):
         self.client.login(username='testpostuser', password='pass12345')
 
         response = self.client.post(self.post_create_url, {
             'title': 'Тестовое обьявление',
             'description': 'Описание для теста',
             'category': 'clothing',
-            'condition': "new",
+            'condition': 'new',
         })
 
         self.assertEqual(response.status_code, 302)
         if response.status_code == 200:
             print("Form errors:", response.context['form'].errors)
+
         from .models import Post
         self.assertTrue(Post.objects.filter(
             title='Тестовое обьявление').exists())
 
         post = Post.objects.get(title='Тестовое обьявление')
         self.assertEqual(post.author, self.user)
+
+    def test_delete_post(self):
+        self.client.login(username='testpostuser', password='pass12345')
+
+        self.assertTrue(Post.objects.filter(id=self.post.id).exists())
+
+        response = self.client.post(self.post_delete_url)
+
+        self.assertEqual(response.status_code, 302)
+
+        self.assertFalse(Post.objects.filter(id=self.post.id).exists())
