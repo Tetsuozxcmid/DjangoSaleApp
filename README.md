@@ -172,8 +172,8 @@ DjangoSaleApp - это веб-платформа для размещения о�
 Тестирование проекта можно выполнить командой ```python manage.py test``` находясь в каталоге проекта auth_system
 
   # Тест аутенфикации пользователей 
-  ```
-Python class UserAuthTests(TestCase):
+  ```Python
+class UserAuthTests(TestCase):
     def setUp(self):
         self.client = Client()
         self.register_url = reverse('auth_register')
