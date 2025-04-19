@@ -38,6 +38,7 @@ class PostCreatesTests(TestCase):
         self.post_create_url = reverse('create_post')
         self.post_delete_url = reverse('delete_post', args=[1])
         self.post_edit_url = reverse('edit_post', args=[1])
+        self.post_search_url = reverse('search')
         self.user = User.objects.create_user(
             username='testpostuser', password='pass12345')
 
@@ -100,7 +101,26 @@ class PostCreatesTests(TestCase):
         self.assertEqual(self.post.description, 'Обновлённое описание')
 
         self.assertEqual(self.post.category, 'electronics')
-        
+
         self.assertEqual(self.post.condition, 'used')
 
         self.assertEqual(self.post.author, self.user)
+
+    def test_search_post(self):
+        self.client.login(username='testpostuser', password='pass12345')
+        Post.objects.create(
+            title='Автомобиль',
+            description='Продаю авто',
+            category='other',
+            condition='used',
+            author=self.user
+        )
+
+        response = self.client.post(self.post_search_url, {
+            'title': 'Автомобиль'
+        })
+
+        self.assertEqual(response.status_code, 200)
+
+    
+        self.assertContains(response, 'Автомобиль')
