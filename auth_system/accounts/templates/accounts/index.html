@@ -4,15 +4,20 @@
 {% block title %}Главная страница{% endblock %}
 
 {% block content %}
-    <div class="container mt-4 mb-4">
-        <form method="get" action="{% url 'search' %}" class="d-flex align-items-center gap-2 mb-4">
-            <input type="text" name="search" placeholder="Поиск по названию..." 
-                   value="{{ request.GET.search }}" class="form-control" style="max-width: 300px;">
-            <button type="submit" class="btn btn-primary">Найти</button>
-            {% if request.GET.search %}
-                <a href="{% url 'auth_welcome' %}" class="btn btn-outline-secondary">Сбросить</a>
-            {% endif %}
-        </form>
+    <div class="container-fluid px-0">  
+        <div class="d-flex align-items-center gap-3 mb-4 ps-3">  
+            <form method="get" action="{% url 'search' %}" class="d-flex align-items-center gap-2 flex-grow-1">
+                <div class="input-group" style="max-width: 500px;">
+                    <input type="text" name="search" placeholder="Поиск по названию..." 
+                           value="{{ request.GET.search }}" 
+                           class="form-control form-control-lg">
+                    <button type="submit" class="btn btn-primary btn-lg">Найти</button>
+                    {% if request.GET.search %}
+                        <a href="{% url 'auth_welcome' %}" class="btn btn-outline-secondary btn-lg">Сбросить</a>
+                    {% endif %}
+                </div>
+            </form>
+        </div>
     </div>
 
     <div class="welcome-container text-center mb-5">
