@@ -159,7 +159,7 @@ def searching(request):
     posts = Post.objects.all()
 
     if search_query:
-        posts = posts.filter(Q(title__icontains=search_query) | Q(description__icontains=search_query))
+        posts = posts.filter(Q(title__icontains=search_query.strip()) | Q(description__icontains=search_query.strip()))
     
 
     posts = posts.order_by('-created_at')
@@ -173,3 +173,5 @@ def searching(request):
           
     }
     return render(request, 'accounts/index.html', context)
+
+
