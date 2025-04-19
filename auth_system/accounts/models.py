@@ -43,5 +43,5 @@ class Offer(models.Model):
     ad_receiver = models.ForeignKey(
         Post, on_delete=models.CASCADE, related_name='received_offers')
     comment = models.TextField(verbose_name='Comment')
-    status = models.CharField(max_length=10, choices=STATUS, default='pending')
+    status = models.CharField(max_length=10, choices=STATUS, default='Ожидает')
     created_at = models.DateTimeField(auto_now_add=True)
