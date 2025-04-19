@@ -7,8 +7,8 @@
 > Платформа для размещения объявлений с системой обмена товарами между пользователями
 
 ## Содержание
-- [Установка](#установка)
-- [Модели данных](#модели-данных)
+- [Установка](#Установка)
+- [Пояснение](#Пояснение)
 - [Возможности](#возможности)
 - [Использование](#использование)
 - [API Endpoints](#api-endpoints)
@@ -20,12 +20,13 @@
 - Python 
 - Django 
 - Sqlite
-
+Создать пустую папку с любым именем, Пример ```djangoapp```
 ### Запуск
 ```bash
 # Клонирование репозитория
-git clone <url>
-cd DjangoSaleApp
+git clone https://github.com/Tetsuozxcmid/DjangoSaleApp
+
+
 ```
 
 # Настройка окружения
@@ -34,6 +35,9 @@ cd DjangoSaleApp
 python -m venv venv
 
 venv/scripts/activate
+
+cd DjangoSaleApp
+cd auth_system
 ```  
 
 # Установка зависимостей
@@ -41,8 +45,8 @@ venv/scripts/activate
 
 # Миграции и запуск
 ```
-cd auth_system
 
+python manage.py makemigrations
 python manage.py migrate
 
 python manage.py runserver
