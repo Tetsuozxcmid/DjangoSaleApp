@@ -22,9 +22,9 @@ class UserAuthTests(TestCase):
         self.assertTrue(User.objects.filter(username='newuser').exists())
 
     def test_login_user(self):
-        User.objects.create_user(username='newuser', password='strongpass123')
+        
         response = self.client.post(self.login_url, {
-            'username': 'newuser',
-            'password': 'strongpass123'
+            'username': 'testuser',
+            'password': 'pass1234'
         })
         self.assertEqual(response.status_code, 302)
