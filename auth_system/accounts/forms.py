@@ -24,10 +24,23 @@ class ExchangeOfferForm(forms.ModelForm):
         model = Offer
         fields = ['ad_receiver', 'comment']
         widgets = {
-            'comment': forms.Textarea(attrs={'rows': 4, 'placeholder': 'Ваше предложение обмена...'}),
+            'comment': forms.Textarea(attrs={
+                'rows': 4, 
+                'placeholder': 'Ваше предложение обмена...'
+            }),
+        }
+        labels = {
+            'ad_receiver': 'Объявление для обмена',
+            'comment': 'Комментарий'
         }
 
-    def __init__(self, *args, user=None, **kwargs):
+    def __init__(self, *args, user=None, initial_receiver=None, **kwargs):
         super().__init__(*args, **kwargs)
         self.user = user
         self.fields['ad_receiver'].queryset = Post.objects.exclude(author=user)
+        
+        
+        if initial_receiver:
+            self.fields['ad_receiver'].initial = initial_receiver
+        
+        self.fields['ad_receiver'].label_from_instance = lambda obj: f"{obj.title} (Категория: {obj.get_category_display()})"

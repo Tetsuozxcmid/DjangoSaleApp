@@ -4,49 +4,61 @@
 {% block title %}Главная страница{% endblock %}
 
 {% block content %}
-    <div class="search-container" style="margin-bottom: 20px;">
-        <form method="get" action="{% url 'search' %}" class="search-form">
+    <div class="container mt-4 mb-4">
+        <form method="get" action="{% url 'search' %}" class="d-flex align-items-center gap-2 mb-4">
             <input type="text" name="search" placeholder="Поиск по названию..." 
-                value="{{ request.GET.search }}" style="padding: 8px; width: 300px;">
-            <button type="submit" style="padding: 8px 15px; background: #007bff; color: white; border: none;">Найти</button>
+                   value="{{ request.GET.search }}" class="form-control" style="max-width: 300px;">
+            <button type="submit" class="btn btn-primary">Найти</button>
             {% if request.GET.search %}
-                <a href="{% url 'auth_welcome' %}" style="margin-left: 10px; color: #007bff;">Сбросить</a>
+                <a href="{% url 'auth_welcome' %}" class="btn btn-outline-secondary">Сбросить</a>
             {% endif %}
         </form>
     </div>
 
-    <div class="welcome-container">
-        <h1>Welcome, {{ user.username }}!</h1>
-        <p>You have successfully logged in.</p>
-        <a href="{% url 'auth_logout' %}" style="color: #007bff; text-decoration: none;">Logout</a>
-
+    <div class="welcome-container text-center mb-5">
+        <h1>Добро пожаловать, {{ user.username }}!</h1>
         
-        <a href="{% url 'user_offers' %}" class="btn btn-offers">Мои предложения</a>
-
-        <p>create post</p>
-        <a href="{% url 'create_post' %}">create</a>
+        <div class="d-flex justify-content-center gap-3">
+            <a href="{% url 'auth_logout' %}" class="btn btn-outline-primary">Выйти</a>
+            <a href="{% url 'user_offers' %}" class="btn btn-outline-success">Мои предложения</a>
+            <a href="{% url 'create_post' %}" class="btn btn-success">Создать пост</a>
+        </div>
     </div>
 
-    <div class="posts-container">
-        {% for post in posts %}
-        <div class="post">
-            <h3>{{ post.title }}</h3>
-            <p><strong>Категория:</strong> {{ post.get_category_display }}</p>
-            <p><strong>Состояние:</strong> {{ post.get_condition_display }}</p>
-            <p>{{ post.description }}</p>
-            <small>Автор: {{ post.author.username }} | {{ post.created_at }}</small>
-            {% if user.is_authenticated and user != post.author %}
-            <a href="{% url 'create_exchange' post.id %}" class="btn btn-primary">Предложить обмен</a>
-            {% endif %}
-            
-            {% if user == post.author %}
-            <a href="{% url 'edit_post' post.id %}" class="btn-edit">Редактировать</a>
-            <form action="{% url 'delete_post' post.id %}" method="POST">
-                {% csrf_token %}
-                <button type="submit">Delete</button>
-            </form>
-            {% endif %}
+    <div class="container">
+        <div class="row justify-content-center">
+            {% for post in posts %}
+            <div class="col-md-8 col-lg-6 mb-4">  <!-- Adjusted column width for better centering -->
+                <div class="card shadow-sm h-100">
+                    <div class="card-body">
+                        <h3 class="card-title text-center">{{ post.title }}</h3>
+                        <div class="d-flex justify-content-center gap-2 mb-3">
+                            <span class="badge bg-secondary">{{ post.get_category_display }}</span>
+                            <span class="badge bg-info text-dark">{{ post.get_condition_display }}</span>
+                        </div>
+                        <div class="card shadow-sm h-50 p-3">
+                            <p class="mb-0">{{ post.description }}</p>
+                        </div>
+                        <small class="text-muted d-block text-center">Автор: {{ post.author.username }} | {{ post.created_at }}</small>
+                    </div>
+                    <div class="card-footer bg-transparent text-center">
+                        {% if user.is_authenticated and user != post.author %}
+                        <a href="{% url 'create_exchange' post.id %}" class="btn btn-primary btn-sm">Предложить обмен</a>
+                        {% endif %}
+                        
+                        {% if user == post.author %}
+                        <div class="btn-group btn-group-sm">
+                            <a href="{% url 'edit_post' post.id %}" class="btn btn-outline-warning">Редактировать</a>
+                            <form action="{% url 'delete_post' post.id %}" method="POST" class="d-inline">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-outline-danger">Удалить</button>
+                            </form>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
         </div>
-        {% endfor %}
     </div>
 {% endblock %}

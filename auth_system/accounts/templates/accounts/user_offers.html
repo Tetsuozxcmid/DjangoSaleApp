@@ -1,38 +1,67 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Мои предложения обмена</title>
-</head>
-<body>
-    <div class="offers-container">
-        <h1>Мои предложения обмена</h1>
-        <a href="{% url 'auth_welcome' %}" class="btn-back">На главную</a>
-        
-        <h2>Полученные предложения</h2>
-        {% if offers %}
-            {% for offer in offers %}
-            <div class="offer">
-                <h3>Предложение для: {{ offer.ad_receiver.title }}</h3>
-                <p>От пользователя: {{ offer.sender_user.username }}</p>
-                <p>Комментарий: {{ offer.comment }}</p>
-                <p>Статус: {{ offer.get_status_display }}</p>
-                <small>Дата: {{ offer.created_at }}</small>
-                <form action="{% url 'accept_offer' offer.id %}" method="POST">
-                    {% csrf_token %}
-                    <button type="submit">Принять</button>
-                </form>
-                <form action="{% url 'reject_offer' offer.id %}" method="POST">
-                    {% csrf_token %}
-                    <button type="submit">Отказать</button>
-                </form>
-                
-            </div>
-            {% endfor %}
-        {% else %}
-            <p>У вас пока нет предложений обмена</p>
-        {% endif %}
+{% extends 'accounts/base.html' %}
+{% load static %}
+{% block title %}Обмены{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="mb-0">Мои предложения обмена</h1>
+        <a href="{% url 'auth_welcome' %}" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left"></i> На главную
+        </a>
     </div>
-</body>
-</html>
+    
+    <div class="card mb-5">
+        <div class="card-header bg-primary text-white">
+            <h2 class="h5 mb-0">Полученные предложения</h2>
+        </div>
+        
+        <div class="card-body">
+            {% if offers %}
+                <div class="list-group">
+                    {% for offer in offers %}
+                    <div class="list-group-item">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h3 class="h5">{{ offer.ad_receiver.title }}</h3>
+                                <p class="mb-1">
+                                    <span class="h5">
+                                        {{ offer.get_status_display }}
+                                    </span>
+                                </p>
+                                <p class="mb-1"><strong>От:</strong> {{ offer.sender_user.username }}</p>
+                                {% if offer.comment %}
+                                <div class="alert alert-light p-2 mt-2 mb-2">
+                                    <p class="mb-0"><strong>Комментарий:</strong> {{ offer.comment }}</p>
+                                </div>
+                                {% endif %}
+                                <small class="text-muted">Дата: {{ offer.created_at }}</small>
+                            </div>
+                            <div class="d-flex flex-column">
+                                <form action="{% url 'accept_offer' offer.id %}" method="POST" class="mb-2">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-success btn-sm">
+                                        <i class="fas fa-check"></i> Принять
+                                    </button>
+                                </form>
+                                <form action="{% url 'reject_offer' offer.id %}" method="POST">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger btn-sm">
+                                        <i class="fas fa-times"></i> Отказать
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i> У вас пока нет предложений обмена
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

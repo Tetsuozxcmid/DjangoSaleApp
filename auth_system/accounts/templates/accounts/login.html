@@ -1,26 +1,32 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Document</title>
-    </head>
-    <body>
-        <form action="{% url 'auth_login' %}" method="POST">
-            {% csrf_token %}
-            <input type="text" name="username">
-            <input type="password" name="password">
-            <button type="submit">Login</button>
-        </form>
-    </body>
-    </html>
-</body>
-</html>
+{% extends 'accounts/base.html' %}
+{% load static %}
+{% block title %}Логин{% endblock %}
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-4">
+            <div class="card p-4 shadow-sm">
+                <h2 class="text-center mb-4">Войти</h2>
+                <form action="{% url 'auth_login' %}" method="POST">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Никнейм</label>
+                        <input type="text" class="form-control" id="username" name="username" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Пароль</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Войти</button>
+                    <div class="reg">
+                        
+                        <a href="{% url 'auth_register' %}" class="btn btn-success" style="margin: 100px;">
+                            <i class="bi bi-person-plus"></i> Создать аккаунт
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

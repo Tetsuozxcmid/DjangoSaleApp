@@ -104,6 +104,7 @@ def create_exchange_offer(request, post_id):
         messages.error(
             request, "Вы не можете предложить обмен своего же объявления!")
         return redirect('post_detail', post_id=post_id)
+    
     if request.method == 'POST':
         form = ExchangeOfferForm(request.POST, user=request.user)
         if form.is_valid():
@@ -114,7 +115,8 @@ def create_exchange_offer(request, post_id):
             messages.success(request, 'Предложение обмена отправлено!')
             return redirect('auth_welcome')
     else:
-        form = ExchangeOfferForm(user=request.user)
+        
+        form = ExchangeOfferForm(user=request.user, initial={'ad_receiver': sender_post})
 
     return render(request, 'accounts/create_offer.html', {
         'form': form,

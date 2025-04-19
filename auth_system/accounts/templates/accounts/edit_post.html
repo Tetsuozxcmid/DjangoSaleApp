@@ -1,11 +1,7 @@
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
+{% extends 'accounts/base.html' %}
+{% load static %}
+{% block title %}Редактировать обьявление{% endblock %}
+{% block content %}
 <body>
     <div class="edit-form-container">
         <h2>Редактирование объявления</h2>
@@ -17,4 +13,4 @@
         </form>
     </div>
 </body>
-</html>
+{% endblock %}
