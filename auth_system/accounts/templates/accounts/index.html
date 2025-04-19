@@ -4,10 +4,24 @@
 {% block title %}Главная страница{% endblock %}
 
 {% block content %}
+    <div class="search-container" style="margin-bottom: 20px;">
+        <form method="get" action="{% url 'search' %}" class="search-form">
+            <input type="text" name="search" placeholder="Поиск по названию..." 
+                value="{{ request.GET.search }}" style="padding: 8px; width: 300px;">
+            <button type="submit" style="padding: 8px 15px; background: #007bff; color: white; border: none;">Найти</button>
+            {% if request.GET.search %}
+                <a href="{% url 'auth_welcome' %}" style="margin-left: 10px; color: #007bff;">Сбросить</a>
+            {% endif %}
+        </form>
+    </div>
+
     <div class="welcome-container">
-        <h1>Welcome, {{ user.username }}!</h1> -> current user
+        <h1>Welcome, {{ user.username }}!</h1>
         <p>You have successfully logged in.</p>
         <a href="{% url 'auth_logout' %}" style="color: #007bff; text-decoration: none;">Logout</a>
+
+        
+        <a href="{% url 'user_offers' %}" class="btn btn-offers">Мои предложения</a>
 
         <p>create post</p>
         <a href="{% url 'create_post' %}">create</a>

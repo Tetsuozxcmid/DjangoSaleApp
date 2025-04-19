@@ -7,7 +7,7 @@
 </head>
 <body>
     <div class="container">
-        <h2>Предложение обмена для "{{ sender_post.title }}"</h2>
+        <h2>Предложение обмена</h2>
         <form method="post">
             {% csrf_token %}
             {{ form.as_p }}
