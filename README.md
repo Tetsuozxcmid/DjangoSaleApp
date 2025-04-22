@@ -1,7 +1,7 @@
 # DjangoSaleApp - сервис объявлений пользователей
 
 ![Django](https://img.shields.io/badge/Django-5.2-brightgreen)
-![Python](https://img.shields.io/badge/Python-3.8+-blue)
+![Python](https://img.shields.io/badge/Python-3.12.5+-blue)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
 > Платформа для размещения объявлений с системой обмена товарами между пользователями
