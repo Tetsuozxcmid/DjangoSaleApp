@@ -1,6 +1,6 @@
 # DjangoSaleApp - сервис объявлений пользователей
 
-![Django](https://img.shields.io/badge/Django-3.2-brightgreen)
+![Django](https://img.shields.io/badge/Django-5.2-brightgreen)
 ![Python](https://img.shields.io/badge/Python-3.8+-blue)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
